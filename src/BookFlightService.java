@@ -43,6 +43,10 @@ class BookFlightService {
             FlightDAO flightDAO = new FlightDAO(connection);
             List<Flight> availableFlights = flightDAO.searchAvailableFlights(sourceCityId, destCityId, date, numOfPassengers);
 
+            if(availableFlights.isEmpty()) {
+                System.out.println("No flights available for the provided details.");
+                return;
+            }
 
             //Call method to select from available flights
             int selectedFlightIndex = -1;
