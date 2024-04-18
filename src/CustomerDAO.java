@@ -41,4 +41,17 @@ import java.util.List;
         return customers;
     }
 
-}
+     public int getLastCustomerId() throws SQLException {
+         int lastCustomerId = 0;
+         String query = "SELECT MAX(customer_id) AS last_customer_id FROM customer";
+         try (PreparedStatement stmt = connection.prepareStatement(query);
+              ResultSet rs = stmt.executeQuery()) {
+             if (rs.next()) {
+                 lastCustomerId = rs.getInt("last_customer_id");
+             }
+         }
+         return lastCustomerId;
+     }
+
+
+ }

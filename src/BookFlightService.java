@@ -66,10 +66,20 @@ class BookFlightService {
                     // Add customer details to the Customer table
                     for (Customer passenger : passengers) {
                         customerDAO.addCustomer(passenger);
-                        Booking booking = new Booking(0,availableFlights.get(selectedFlightIndex).getFlightId(), passenger.getCustomerId(), LocalDateTime.now(), Booking.BOOKED, availableFlights.get(selectedFlightIndex).getTicketPrice());
+                    }
+
+                    // Get the last inserted customer ID
+                    int lastCustomerId = customerDAO.getLastCustomerId();
+
+                    // Add booking details to the Booking table
+                    for (int i = 0; i < passengers.size(); i++) {
+                        Customer passenger = passengers.get(i);
+                        int customerId = lastCustomerId - passengers.size() + i + 1;
+                        Booking booking = new Booking(0, availableFlights.get(selectedFlightIndex).getFlightId(), customerId, LocalDateTime.now(), Booking.BOOKED, availableFlights.get(selectedFlightIndex).getTicketPrice());
                         bookingDAO.addBooking(booking);
                         bookings.add(booking);
                     }
+
                     System.out.println("Booking confirmed.");
                     System.out.println(bookings);
 
