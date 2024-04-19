@@ -1,4 +1,5 @@
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -79,6 +80,7 @@ class FlightDAO {
     }
 
     public List<Flight> searchAvailableFlights(int src_id, int dest_id, String date, int numOfPassengers) throws SQLException {
+        PriceCalculationService priceCalculationService = new PriceCalculationService(connection);
         List<Flight> availableFlights = new ArrayList<>();
         String query = "SELECT * FROM flight WHERE src_id = ? AND dest_id = ? AND DATE(departure_datetime) = ? AND available_seats >= ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -99,6 +101,11 @@ class FlightDAO {
                 flight.setTotalSeats(resultSet.getInt("total_seats"));
                 flight.setAvailableSeats(resultSet.getInt("available_seats"));
                 flight.setTicketPrice(resultSet.getBigDecimal("ticket_price"));
+
+                //Reset ticket price after getting dynamic price
+                BigDecimal flightDynamicPrice = priceCalculationService.getDynamicPrice(flight);
+
+                flight.setTicketPrice(flightDynamicPrice.add(flight.getTicketPrice()).setScale(2, RoundingMode.HALF_EVEN));
                 availableFlights.add(flight);
             }
         }

@@ -77,13 +77,11 @@ class Booking {
     // toString method
     @Override
     public String toString() {
-        return "Booking{" +
-                "bookingId=" + bookingId +
-                ", flightId=" + flightId +
-                ", customerId=" + customerId +
-                ", bookingDateTime=" + bookingDateTime +
-                ", bookingStatus=" + bookingStatus +
-                ", totalAmount=" + totalAmount +
-                '}';
+        return "Booking ID: " + bookingId + "\n" +
+                "Flight ID: " + flightId + "\n" +
+                "Customer ID: " + customerId + "\n" +
+                "Booking Date and Time: " + bookingDateTime + "\n" +
+                "Booking Status: " + bookingStatus + "\n" +
+                "Total Amount: " + totalAmount;
     }
 }
