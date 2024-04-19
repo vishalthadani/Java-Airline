@@ -84,6 +84,9 @@ class BookFlightService {
                         bookings.add(booking);
                     }
 
+                    //Decrement number of available seats
+                    flightDAO.decrementAvailableSeats(availableFlights.get(selectedFlightIndex).getFlightId(), numOfPassengers);
+
                     System.out.println("Booking confirmed.");
                     System.out.println(bookings);
 

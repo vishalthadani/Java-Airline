@@ -26,6 +26,34 @@ class BookingDAO {
         }
     }
 
+    public Booking getBookingById(int bookingId) throws SQLException {
+        String query = "SELECT * FROM booking WHERE booking_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, bookingId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    int flightId = rs.getInt("flight_id");
+                    int customerId = rs.getInt("customer_id");
+                    LocalDateTime bookingDateTime = rs.getObject("booking_datetime", LocalDateTime.class);
+                    String bookingStatus = String.valueOf(rs.getString("booking_status"));
+                    BigDecimal totalAmount = rs.getBigDecimal("total_amount");
+                    return new Booking(bookingId, flightId, customerId, bookingDateTime, bookingStatus, totalAmount);
+                } else {
+                    return null; // Booking not found
+                }
+            }
+        }
+    }
+
+    public void updateBookingStatus(int bookingId, String bookingStatus) throws SQLException {
+        String query = "UPDATE booking SET booking_status = ? WHERE booking_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, bookingStatus);
+            stmt.setInt(2, bookingId);
+            stmt.executeUpdate();
+        }
+    }
+
     public List<Booking> getBookingsByCustomerId(int customerId) throws SQLException {
         List<Booking> bookings = new ArrayList<>();
         String query = "SELECT * FROM booking WHERE customer_id = ?";

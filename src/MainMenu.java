@@ -11,6 +11,7 @@ class MainMenu {
 
         Scanner scanner = new Scanner(System.in);
         BookFlightService bookFlightService = new BookFlightService(connection);
+        CancelBookingService cancelBookingService = new CancelBookingService(connection);
         while (true) {
             AirlineReservationCLI.clearScreen();
             System.out.println("Main Menu");
@@ -29,7 +30,7 @@ class MainMenu {
                     break;
                 case 2:
                     System.out.println("You selected Cancel Ticket.");
-                    // Implement cancel ticket functionality
+                    cancelBookingService.cancelBooking(scanner);
                     break;
                 case 3:
                     System.out.println("You selected View Booked Tickets.");

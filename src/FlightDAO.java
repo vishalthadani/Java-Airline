@@ -51,10 +51,19 @@ class FlightDAO {
         return flights;
     }
 
-    public void updateAvailableSeats(int flightId, int seatsBooked) throws SQLException {
+    public void decrementAvailableSeats(int flightId, int seatsBooked) throws SQLException {
         String query = "UPDATE flight SET available_seats = available_seats - ? WHERE flight_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, seatsBooked);
+            stmt.setInt(2, flightId);
+            stmt.executeUpdate();
+        }
+    }
+
+    public void incrementAvailableSeats(int flightId, int numSeats) throws SQLException {
+        String query = "UPDATE flight SET available_seats = available_seats + ? WHERE flight_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, numSeats);
             stmt.setInt(2, flightId);
             stmt.executeUpdate();
         }
